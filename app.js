@@ -79,7 +79,10 @@ const LESSONS_DATA = [
 let state = {
   currentScreen: "home", // 'home' | 'app'
   activeView: "original",
-  currentLesson: 1,
+  currentLesson: (() => {
+    const lesson = Number(new URLSearchParams(window.location.search).get("lesson"));
+    return Number.isInteger(lesson) && lesson >= 1 && lesson <= 7 ? lesson : 1;
+  })(),
   simMode: 0,
   modalPartId: null,
   modalViewerMode: "html360",
