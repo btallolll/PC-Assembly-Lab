@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Cisco IT Essentials Virtual Desktop — محاكي تجميع الحاسوب</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap" rel="stylesheet" />
+
+  <script>
+    window.RufflePlayer = window.RufflePlayer || {};
+    window.RufflePlayer.config = {
+      autoplay: "on",
+      unmuteOverlay: "hidden",
+      splashScreen: false,
+      letterbox: "on",
+      scale: "showAll",
+      warnOnUnsupportedContent: false,
+      quality: matchMedia("(pointer: coarse)").matches ? "medium" : "high",
+      maxExecutionDuration: 60,
+      showSwfDownload: false,
+      contextMenu: "off"
+    };
+  </script>
+
+  <link rel="stylesheet" href="styles.css?v=mobile9" />
+</head>
+<body>
+
+  <!-- ==========================================
+       1. الشاشة الترحيبية وقائمة البداية الاحترافية
+       ========================================== -->
+  <div id="home-screen" class="home-screen">
+    <div class="home-background-glow"></div>
+
+    <div class="home-hero">
+      <div class="brand-badge">
+        <div class="cisco-logo-mini">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <span>Cisco Networking Academy • IT Essentials v4.0</span>
+      </div>
+
+      <h1 class="home-title">محاكي تجميع الحاسوب الاحترافي</h1>
+      <p class="home-subtitle">
+        بيئة تفاعلية للتعرف على عتاد الحاسوب وتجميعه خطوة بخطوة.
+      </p>
+
+      <div class="home-cards-container">
+        <!-- خيار المحاكي الأصلي -->
+        <div class="choice-card choice-simulator" onclick="launchApp('original')">
+          <div class="card-glow"></div>
+          <div class="card-icon">🖥️</div>
+          <div class="card-content">
+            <span class="card-tag">المحاكي الحقيقي</span>
+            <h2>المحاكي الأصلي 3D</h2>
+            <p>خوض تجربة تجميع الحاسوب الكاملة كما صممتها سيسكو بمراحله الـ 7، مع أوضاع التعلّم والاختبار والتثبيت.</p>
+            <div class="card-meta">
+              <span>7 مراحل تجميع</span> • <span>أوضاع Learn / Test</span>
+            </div>
+          </div>
+          <div class="card-action">
+            <span>دخول المحاكي</span>
+            <span class="arrow-icon">←</span>
+          </div>
+        </div>
+
+        <!-- خيار موسوعة القطع 360° -->
+        <div class="choice-card choice-explorer" onclick="launchApp('explorer')">
+          <div class="card-glow"></div>
+          <div class="card-icon">🔍</div>
+          <div class="card-content">
+            <span class="card-tag">الموسوعة الشاملة</span>
+            <h2>موسوعة القطع</h2>
+            <p>استكشف مكونات الحاسوب وتعرف على وظيفة كل قطعة وقواعد المحاذاة.</p>
+            <div class="card-meta">
+              <span>قطع وعتاد</span> • <span>عارض سيسكو</span>
+            </div>
+          </div>
+          <div class="card-action">
+            <span>فتح الموسوعة</span>
+            <span class="arrow-icon">←</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mobile-tip-banner">
+        💡 <strong>نصيحة لمستخدمي الجوال:</strong> للحصول على تجربة تحكم مثالية ومريحة في المحاكي الأصلي، قم بتدوير الهاتف إلى <strong>الوضع الأفقي (Landscape)</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       2. شاشة تطبيق المحاكي والموسوعة
+       ========================================== -->
+  <div id="app-screen" class="app-screen" style="display: none;">
+    <!-- Top Navigation Bar -->
+    <header class="topbar">
+      <div class="brand">
+        <button class="btn-home" onclick="returnToHome()" title="العودة لقائمة البداية">
+          <span>🏠</span>
+          <span>القائمة الرئيسية</span>
+        </button>
+        <div class="brand-text">
+          <h1>Cisco IT Essentials</h1>
+        </div>
+      </div>
+
+      <!-- Main View Switcher -->
+      <nav class="view-switcher" aria-label="أنماط العرض">
+        <button class="view-btn active" data-view="original" onclick="switchView('original')">
+          <span>🖥️</span>
+          <span>المحاكي الأصلي 3D</span>
+        </button>
+        <button class="view-btn" data-view="explorer" onclick="switchView('explorer')">
+          <span>🔍</span>
+          <span>موسوعة القطع</span>
+        </button>
+      </nav>
+
+      <!-- Actions -->
+      <div class="topbar-actions">
+        <button class="action-btn" onclick="resetCurrentLayer()" title="إعادة ضبط المرحلة الحالية">
+          <span>🔄</span>
+          <span class="btn-text-resp">إعادة</span>
+        </button>
+        <button class="action-btn" onclick="toggleFullscreen()" title="ملء الشاشة">
+          <span>⛶</span>
+          <span class="btn-text-resp">تكبير</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+      <main class="main-stage">
+
+
+        <!-- VIEW 1: Authentic Cisco 3D Simulator -->
+        <section class="view-panel active" id="view-original">
+          <!-- تنبيه خاص بالجوال لتوجيه الشاشة -->
+          <div class="mobile-orient-prompt" id="mobile-orient-prompt">
+            <span>🔄 للحصول على أفضل تحكم وأكبر مساحة باللمس، اقلب هاتفك بالوضع العرضي (Landscape)</span>
+            <button class="btn-dismiss-orient" onclick="dismissOrientPrompt()">✕</button>
+          </div>
+
+          <div class="swf-frame-wrapper" id="swf-frame-wrapper">
+            <div id="ruffle-container"></div>
+          </div>
+        </section>
+
+        <!-- VIEW 2: 360° Component Explorer & Encyclopedia -->
+        <section class="view-panel" id="view-explorer">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom: 12px;">
+            <div>
+              <h2 style="font-size:17px; color:#fff;">موسوعة مكونات الحاسوب</h2>
+              <p style="font-size:12.5px; color:var(--text-muted);">فحص القطع والتعرف على وظائفها وزوايا تركيبها</p>
+            </div>
+          </div>
+          <div class="explorer-grid" id="explorer-parts-grid"></div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- 360° Interactive Component Explore Modal -->
+  <div class="modal-backdrop" id="part-explore-modal" onclick="if(event.target===this) closePartModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modal-part-title" style="font-size:15px; color:#fff;"></h3>
+        <div style="display:flex; gap:6px;">
+          <button class="action-btn" onclick="closePartModal()">✕ إغلاق</button>
+        </div>
+      </div>
+      <div class="modal-body" id="modal-part-body"></div>
+    </div>
+  </div>
+
+  <script src="app.js?v=mobile11"></script>
+</body>
+</html>
