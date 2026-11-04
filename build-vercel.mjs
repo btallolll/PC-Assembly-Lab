@@ -12,10 +12,11 @@ for (const name of ['index.html', 'app.js', 'styles.css', 'PC', 'ruffle-local'])
 }
 
 // Keep the original assets intact and overlay only the experimental mobile stages.
-if (fs.existsSync('mobile-test/models')) {
-  fs.cpSync('PC', path.join(output, 'mobile-test'), {
+for (const trial of ['mobile-test', 'mobile-test-v2']) {
+  if (!fs.existsSync(path.join(trial, 'models'))) continue;
+  fs.cpSync('PC', path.join(output, trial), {
     recursive: true,
     filter: source => !source.endsWith('.patched')
   });
-  fs.cpSync('mobile-test/models', path.join(output, 'mobile-test/models'), { recursive: true });
+  fs.cpSync(path.join(trial, 'models'), path.join(output, trial, 'models'), { recursive: true });
 }

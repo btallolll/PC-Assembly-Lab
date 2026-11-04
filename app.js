@@ -246,7 +246,8 @@ async function loadOriginalSimulator(lessonId, modeId) {
     : null;
 
   if (ruffle) {
-    const assetBase = new URLSearchParams(window.location.search).get("trial") === "mobile" ? "mobile-test/" : "PC/";
+    const trial = new URLSearchParams(window.location.search).get("trial");
+    const assetBase = trial === "mobile2" ? "mobile-test-v2/" : trial === "mobile" ? "mobile-test/" : "PC/";
     const player = ruffle.createPlayer();
     player.style.width = "100%";
     player.style.height = "100%";
