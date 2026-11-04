@@ -12,7 +12,7 @@ for (const name of ['index.html', 'app.js', 'styles.css', 'PC', 'ruffle-local'])
 }
 
 // Keep the original assets intact and overlay only the experimental mobile stages.
-for (const trial of ['mobile-test', 'mobile-test-v2']) {
+for (const trial of ['mobile-test', 'mobile-test-v2', 'mobile-test-v3']) {
   if (!fs.existsSync(path.join(trial, 'models'))) continue;
   fs.cpSync('PC', path.join(output, trial), {
     recursive: true,
