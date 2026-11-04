@@ -3,7 +3,7 @@ import path from 'node:path';
 
 const output = path.resolve('dist');
 fs.mkdirSync(output, { recursive: true });
-for (const name of ['index.html', 'app.js', 'styles.css', 'motherboard-lab.html', 'motherboard-lab.css', 'motherboard-lab.js', 'PC', 'ruffle-local']) {
+for (const name of ['index.html', 'app.js', 'styles.css', 'PC', 'ruffle-local']) {
   if (!fs.existsSync(name)) throw new Error(`Missing required asset: ${name}`);
   fs.cpSync(name, path.join(output, name), {
     recursive: true,
