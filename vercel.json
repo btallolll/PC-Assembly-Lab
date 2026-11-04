@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "buildCommand": "node build-vercel.mjs",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/models/:path*", "destination": "/PC/models/:path*" },
+    { "source": "/media/:path*", "destination": "/PC/media/:path*" },
+    { "source": "/essentials.xml", "destination": "/PC/essentials.xml" }
+  ],
+  "headers": [
+    { "source": "/:path*.swf", "headers": [{ "key": "Content-Type", "value": "application/x-shockwave-flash" }] },
+    { "source": "/:path*.wasm", "headers": [{ "key": "Content-Type", "value": "application/wasm" }] }
+  ]
+}
