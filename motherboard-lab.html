@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#07131b">
+  <title>مختبر اللوحة الأم</title>
+  <link rel="stylesheet" href="motherboard-lab.css?v=1">
+  <script src="motherboard-lab.js?v=1" defer></script>
+</head>
+<body>
+  <header class="header"><a href="index.html" class="back">← القائمة الرئيسية</a><div><strong>مختبر اللوحة الأم</strong><small>نسخة تجريبية للجوال</small></div><button id="reset" class="quiet">بدء من جديد</button></header>
+  <main>
+    <section class="intro"><span class="eyebrow">المرحلة التجريبية • 01</span><h1>ركّب اللوحة الأم خطوة بخطوة</h1><p>اختر القطعة المطلوبة، ثم المس المكان المضيء على اللوحة لتركيبها.</p></section>
+    <div class="layout">
+      <section class="workspace" aria-label="منطقة تركيب اللوحة الأم">
+        <div class="workspace-head"><span>لوحة التدريب</span><span id="progress" aria-live="polite"></span></div>
+        <div class="board" aria-label="رسم توضيحي للوحة الأم">
+          <div class="ports" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <div class="chipset" aria-hidden="true">CHIPSET</div>
+          <div class="expansion" aria-hidden="true"><i></i><i></i><i></i></div>
+          <button class="socket target" data-target="cpu" aria-label="مقبس المعالج"><span>CPU</span></button>
+          <div class="ram-slots"><button class="ram-slot target" data-target="ram1" aria-label="منفذ الذاكرة الأول"><span>RAM 1</span></button><button class="ram-slot target" data-target="ram2" aria-label="منفذ الذاكرة الثاني"><span>RAM 2</span></button></div>
+          <div class="board-label" aria-hidden="true">PC ASSEMBLY LAB</div>
+        </div>
+        <p id="feedback" class="feedback" role="status" aria-live="polite">اختر المعالج للبدء.</p>
+      </section>
+      <aside class="panel">
+        <div class="panel-top"><span class="eyebrow">خطوة بخطوة</span><h2 id="step-title"></h2><p id="step-help"></p></div>
+        <div id="parts" class="parts" aria-label="القطع المتاحة"></div>
+        <div class="note">التقدم يُحفظ على هذا المتصفح. العرض توضيحي للتركيب، وليس نموذجًا ثلاثي الأبعاد.</div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
