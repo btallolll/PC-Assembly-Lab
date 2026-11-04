@@ -246,6 +246,7 @@ async function loadOriginalSimulator(lessonId, modeId) {
     : null;
 
   if (ruffle) {
+    const assetBase = new URLSearchParams(window.location.search).get("trial") === "mobile" ? "mobile-test/" : "PC/";
     const player = ruffle.createPlayer();
     player.style.width = "100%";
     player.style.height = "100%";
@@ -253,8 +254,8 @@ async function loadOriginalSimulator(lessonId, modeId) {
     currentRufflePlayer = player;
 
     player.load({
-      url: `PC/RootMovie.swf?lesson=${lessonId}&mode=${modeId}`,
-      base: "PC/",
+      url: `${assetBase}RootMovie.swf?lesson=${lessonId}&mode=${modeId}`,
+      base: assetBase,
       quality: window.matchMedia("(pointer: coarse)").matches ? "medium" : "high",
       scale: window.matchMedia("(max-height: 500px) and (orientation: landscape)").matches ? "exactFit" : "showAll",
       letterbox: "on",
