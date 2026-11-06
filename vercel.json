@@ -10,6 +10,8 @@
   ],
   "headers": [
     { "source": "/:path*.swf", "headers": [{ "key": "Content-Type", "value": "application/x-shockwave-flash" }] },
-    { "source": "/:path*.wasm", "headers": [{ "key": "Content-Type", "value": "application/wasm" }] }
+    { "source": "/:path*.wasm", "headers": [{ "key": "Content-Type", "value": "application/wasm" }] },
+    { "source": "/(.*\\.(html|js|css))", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] },
+    { "source": "/", "headers": [{ "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }] }
   ]
 }

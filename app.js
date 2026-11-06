@@ -672,6 +672,9 @@ function destroyModalPlayer() {
 }
 
 function initApp() {
+  try {
+    sessionStorage.removeItem("simulator-active");
+  } catch (e) {}
   applyLightweightMode();
   renderLessonPills();
   window.addEventListener("resize", fitSimulatorScale);
