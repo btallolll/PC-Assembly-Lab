@@ -1,6 +1,7 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import zlib from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -25,9 +26,10 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
+const COMPRESSIBLE_EXTS = new Set(['.html', '.css', '.js', '.mjs', '.json', '.xml', '.svg']);
+
 // Case-insensitive file resolver + automatic smart fallback for nested Flash relative paths
 function resolveFileSmart(baseDir, relPath) {
-  // Normalize duplicated relative paths from Flash movies (e.g., PC/media/explore/media/explore/flv/...)
   let normalized = relPath
     .replace(/\\/g, '/')
     .replace(/^\/+/, '')
@@ -36,7 +38,14 @@ function resolveFileSmart(baseDir, relPath) {
     .replace(/^models\//i, 'PC/models/')
     .replace(/^media\//i, 'PC/media/');
 
-  const candidates = [normalized, relPath.replace(/\\/g, '/').replace(/^\/+/, '')];
+  const rawClean = relPath.replace(/\\/g, '/').replace(/^\/+/, '');
+  const candidates = [rawClean, normalized];
+  if (/^mobile-test(-v[23])?\//i.test(rawClean)) {
+    const sub = rawClean
+      .replace(/^mobile-test(-v[23])?\//i, '')
+      .replace(/^media\/explore\/media\/explore\//i, 'media/explore/');
+    candidates.push('PC/' + sub);
+  }
   if (!normalized.toLowerCase().startsWith('pc/')) {
     candidates.push('PC/' + normalized);
   }
@@ -44,7 +53,7 @@ function resolveFileSmart(baseDir, relPath) {
   for (const cand of candidates) {
     const exactPath = path.join(baseDir, cand);
     if (fs.existsSync(exactPath) && !fs.statSync(exactPath).isDirectory()) {
-      return exactPath;
+      return { path: exactPath, candidates };
     }
 
     const segments = cand.split(/[\\/]+/).filter(Boolean);
@@ -64,10 +73,10 @@ function resolveFileSmart(baseDir, relPath) {
       current = path.join(current, match);
     }
     if (found && fs.existsSync(current) && !fs.statSync(current).isDirectory()) {
-      return current;
+      return { path: current, candidates };
     }
   }
-  return null;
+  return { path: null, candidates };
 }
 
 const server = http.createServer((req, res) => {
@@ -77,29 +86,51 @@ const server = http.createServer((req, res) => {
     if (pathname === '/') pathname = '/index.html';
 
     const safeRel = path.normalize(pathname).replace(/^(\.\.(\/|\\|$))+/, '').replace(/^[/\\]+/, '');
-    const resolved = resolveFileSmart(__dirname, safeRel);
+    const { path: resolved, candidates } = resolveFileSmart(__dirname, safeRel);
 
-    console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${pathname} -> ${resolved ? 200 : 404}`);
+    const logStatus = resolved ? 200 : 404;
+    console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${pathname} -> ${logStatus}`);
 
     if (!resolved) {
-      res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-      res.end('404 Not Found: ' + pathname);
+      res.writeHead(404, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({
+        status: 404,
+        error: 'الملف غير موجود (404 Not Found)',
+        requestedPath: pathname,
+        reason: `تعذر العثور على الملف المطلوب "${pathname}". تأكد من وجود الملف في مجلد المشروع وأن الاسم صحيح.`,
+        candidatesChecked: candidates
+      }, null, 2));
       return;
     }
 
     const ext = path.extname(resolved).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-
     const stat = fs.statSync(resolved);
     const totalSize = stat.size;
 
-    // Smart caching: HTML is always checked, while large static assets (SWF, WASM, images) are cached
+    // HTTP Caching with ETag and Last-Modified
+    const etag = `W/"${stat.size.toString(16)}-${stat.mtimeMs.toString(16)}"`;
+    res.setHeader('ETag', etag);
+    res.setHeader('Last-Modified', stat.mtime.toUTCString());
+
+    const clientEtag = req.headers['if-none-match'];
+    if (clientEtag && clientEtag === etag) {
+      res.writeHead(304, { 'Access-Control-Allow-Origin': '*' });
+      res.end();
+      return;
+    }
+
+    // Static assets (WASM, SWF, PNG, JPG) are cached long-term for high speed; HTML is verified
     const cacheHeader = ext === '.html'
       ? 'no-cache'
       : 'public, max-age=86400, immutable';
 
     const rangeHeader = req.headers.range;
 
+    // Support HTTP Range requests (needed for video / streaming / chunked media)
     if (rangeHeader) {
       const parts = rangeHeader.replace(/bytes=/, '').split('-');
       const start = parseInt(parts[0], 10);
@@ -124,6 +155,29 @@ const server = http.createServer((req, res) => {
       return;
     }
 
+    // Gzip compression for text/code resources to make initial download very lightweight and fast
+    const acceptEncoding = req.headers['accept-encoding'] || '';
+    const shouldCompress = COMPRESSIBLE_EXTS.has(ext) && totalSize > 512;
+
+    if (shouldCompress && acceptEncoding.includes('gzip')) {
+      res.writeHead(200, {
+        'Content-Type': contentType,
+        'Content-Encoding': 'gzip',
+        'Vary': 'Accept-Encoding',
+        'Cache-Control': cacheHeader,
+        'Access-Control-Allow-Origin': '*'
+      });
+
+      if (req.method === 'HEAD') {
+        res.end();
+        return;
+      }
+
+      const raw = fs.createReadStream(resolved);
+      raw.pipe(zlib.createGzip()).pipe(res);
+      return;
+    }
+
     res.writeHead(200, {
       'Content-Type': contentType,
       'Content-Length': totalSize,
@@ -139,8 +193,17 @@ const server = http.createServer((req, res) => {
 
     fs.createReadStream(resolved).pipe(res);
   } catch (err) {
-    res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
-    res.end('500 Internal Server Error');
+    console.error(`[Server Error 500]`, err);
+    res.writeHead(500, {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Access-Control-Allow-Origin': '*'
+    });
+    res.end(JSON.stringify({
+      status: 500,
+      error: 'خطأ داخلي في الخادم (500 Internal Server Error)',
+      reason: err.message || 'حدث خطأ غير متوقع أثناء معالجة الطلب في الخادم.',
+      stack: err.stack
+    }, null, 2));
   }
 });
 

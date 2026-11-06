@@ -90,6 +90,42 @@ html, body {
   box-shadow: 0 4px 18px rgba(0, 188, 235, 0.15);
 }
 
+.badge-pill-new {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 99px;
+  margin-right: 4px;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.update-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  color: #a7f3d0;
+  max-width: 660px;
+  line-height: 1.5;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+}
+
+.update-tag {
+  background: #10b981;
+  color: #064e3b;
+  font-weight: 900;
+  font-size: 11.5px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
 .cisco-logo-mini {
   display: flex;
   align-items: flex-end;
@@ -577,6 +613,10 @@ html, body {
 #ruffle-container canvas {
   width: 100% !important;
   height: 100% !important;
+  touch-action: none !important;
+  overscroll-behavior: none !important;
+  -webkit-user-drag: none;
+}
   display: block;
   touch-action: none !important;
   overscroll-behavior: none !important;
@@ -773,27 +813,83 @@ html, body {
   background: var(--cisco-blue);
 }
 
+.view-label-short {
+  display: none;
+}
+.view-label-full {
+  display: inline;
+}
+.btn-home-label {
+  display: inline;
+}
+
+.landscape-float-bar {
+  display: none;
+}
+
 /* ==========================================
-   MOBILE RESPONSIVE
+   MOBILE RESPONSIVE (تحسينات شاملة للهواتف والشاشات الصغيرة)
    ========================================== */
 @media (max-width: 768px) {
+  .home-screen {
+    padding: 14px 10px;
+    align-items: flex-start;
+  }
+  .home-hero {
+    gap: 12px;
+    margin-top: 6px;
+  }
+  .brand-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
   .home-title {
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 1.3;
   }
   .home-subtitle {
-    font-size: 13px;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .update-banner {
+    font-size: 11.5px;
+    padding: 6px 10px;
+    border-radius: 8px;
   }
   .home-cards-container {
     grid-template-columns: 1fr;
-    gap: 14px;
+    gap: 10px;
+    width: 100%;
   }
   .choice-card {
-    padding: 18px;
+    padding: 14px;
+    gap: 8px;
+    border-radius: 12px;
+  }
+  .card-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    border-radius: 10px;
+  }
+  .card-content h2 {
+    font-size: 16px;
+  }
+  .card-content p {
+    font-size: 11.5px;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+  .card-action {
+    padding-top: 8px;
+    font-size: 12px;
   }
 
+  /* الشريط العلوي على الجوال */
   .topbar {
-    padding: 0 8px;
+    padding: 0 6px;
     height: 44px;
+    gap: 6px;
   }
   .brand-text {
     display: none;
@@ -801,10 +897,38 @@ html, body {
   .btn-text-resp {
     display: none;
   }
+  .btn-home-label {
+    display: none;
+  }
+  .view-label-full {
+    display: none;
+  }
+  .view-label-short {
+    display: inline;
+  }
+  .view-btn {
+    padding: 5px 8px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
 
   /* تنبيه تدوير الشاشة على الجوال */
   .mobile-orient-prompt {
     display: flex;
+    font-size: 11px;
+    padding: 5px 8px;
+  }
+
+  /* شريط المراحل الأفقي للهاتف */
+  .stage-toolbar {
+    height: 40px;
+    padding: 0 6px;
+    background: rgba(13, 21, 38, 0.98);
+  }
+  .lesson-pill {
+    padding: 3px 8px;
+    font-size: 11px;
+    flex-shrink: 0;
   }
 
   .modal-card {
@@ -818,21 +942,24 @@ html, body {
   }
   .modal-3d-box {
     width: 100%;
-    height: 270px;
+    height: 240px;
   }
 
-  /* اجعل محاكي Cisco يملأ عرض الجوال بدل أن يظهر كنافذة سطح مكتب صغيرة */
+  /* ملاءمة أبعاد المحاكي هندسياً على الجوال في الوضع الرأسي بدون تشويه أو مط */
   #view-original {
-    width: 100vw;
-    height: calc(100vh - 44px);
+    width: 100%;
+    height: 100%;
     min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .swf-frame-wrapper {
-    width: 100vw !important;
     max-width: 100vw;
-    height: calc(100vh - 44px) !important;
-    max-height: calc(100vh - 44px);
+    max-height: 100%;
+    margin: auto;
   }
 
   #ruffle-container,
@@ -843,48 +970,406 @@ html, body {
   }
 }
 
-/* عند حمل الهاتف بالوضع الأفقي (Landscape) */
-@media (max-height: 500px) and (orientation: landscape) {
+/* ==========================================
+   وضع ملء الشاشة الأفقي (Landscape Full-Bleed) لجميع الهواتف الحديثة
+   ========================================== */
+@media (orientation: landscape) and (max-height: 650px) {
   .app-screen:has(#view-original.active) .stage-toolbar {
     display: none !important;
   }
   .app-screen:has(#view-original.active) .topbar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    height: auto;
-    padding: 2px;
-    background: transparent;
-    border: 0;
-  }
-  .app-screen:has(#view-original.active) .topbar .view-switcher,
-  .app-screen:has(#view-original.active) .topbar-actions,
-  .app-screen:has(#view-original.active) .brand-text {
-    display: none;
+    display: none !important;
   }
   .app-screen:has(#view-original.active) .workspace {
-    height: 100dvh;
+    height: 100dvh !important;
+    width: 100vw !important;
   }
   #view-original {
-    width: 100vw;
-    height: 100dvh;
+    width: 100vw !important;
+    height: 100dvh !important;
   }
   #view-original .swf-frame-wrapper {
     width: 100vw !important;
     height: 100dvh !important;
-    max-width: none;
-    max-height: none;
+    max-width: none !important;
+    max-height: none !important;
   }
   .mobile-orient-prompt {
     display: none !important;
   }
-  .topbar {
-    height: 42px;
+
+  /* أدوات تحكم عائمة خفيفة في زاوية الشاشة عند الإمساك بالوضع الأفقي */
+  .landscape-float-bar {
+    display: flex !important;
+    position: fixed;
+    top: 8px;
+    right: 8px;
+    z-index: 1000;
+    gap: 6px;
+    background: rgba(13, 21, 38, 0.75);
+    padding: 4px 8px;
+    border-radius: 99px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
   }
-  .stage-toolbar {
-    height: 36px;
+  .float-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 6px;
+    transition: transform 0.15s ease;
   }
-  .workspace {
-    height: calc(100vh - 42px);
+  .float-btn:active {
+    transform: scale(0.9);
   }
+}
+
+/* ==========================================
+   3. ULTRA-LIGHTWEIGHT MODE (الوضع الخفيف جداً)
+   ========================================== */
+body.lightweight-mode {
+  background: #070b14 !important;
+}
+
+body.lightweight-mode * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  text-shadow: none !important;
+}
+
+body.lightweight-mode .home-background-glow {
+  display: none !important;
+}
+
+body.lightweight-mode .home-screen {
+  background: #070b14 !important;
+}
+
+body.lightweight-mode .choice-card {
+  background: #0d1526 !important;
+  box-shadow: none !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+}
+
+body.lightweight-mode .choice-card:hover {
+  transform: none !important;
+  background: #152238 !important;
+}
+
+body.lightweight-mode .topbar {
+  background: #0d1526 !important;
+}
+
+body.lightweight-mode .modal-backdrop {
+  background: rgba(4, 8, 16, 0.94) !important;
+}
+
+body.lightweight-mode .part-card {
+  contain: content;
+  content-visibility: auto;
+  contain-intrinsic-size: 150px;
+}
+
+/* زر تبديل الوضع الخفيف */
+.btn-lightweight {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  transition: all 0.2s ease;
+}
+
+.btn-lightweight:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+}
+
+.btn-lightweight.active {
+  background: #f59e0b;
+  color: #070b14;
+  font-weight: 800;
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+/* تسريع الرندر بالعتاد لعارض المحاكي */
+.swf-frame-wrapper {
+  transform: translateZ(0);
+  will-change: width, height;
+}
+
+/* ==========================================
+   4. ERROR DIAGNOSTICS MODAL & TOAST (لوحة توضيح سبب المشكلة)
+   ========================================== */
+.diag-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 18, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+  animation: diagFadeIn 0.2s ease-out;
+}
+
+@keyframes diagFadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.diag-card {
+  background: #0f172a;
+  border: 1.5px solid #ef4444;
+  border-radius: 14px;
+  max-width: 580px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(239, 68, 68, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.diag-header {
+  padding: 14px 18px;
+  background: rgba(239, 68, 68, 0.12);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.diag-header-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fca5a5;
+  font-size: 15.5px;
+  font-weight: 800;
+}
+
+.diag-close-btn {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.diag-close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.diag-body {
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.diag-reason-box {
+  background: rgba(239, 68, 68, 0.08);
+  border-right: 4px solid #ef4444;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.diag-reason-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #f87171;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.diag-reason-text {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+.diag-solution-box {
+  background: rgba(4, 159, 217, 0.08);
+  border-right: 4px solid var(--cisco-blue);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.diag-solution-badge {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--cisco-teal);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.diag-solution-text {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #cbd5e1;
+}
+
+.diag-details {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.diag-details summary {
+  font-size: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  font-weight: 700;
+  outline: none;
+  user-select: none;
+}
+
+.diag-details summary:hover {
+  color: #f1f5f9;
+}
+
+.diag-details pre {
+  margin-top: 8px;
+  font-family: monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #fca5a5;
+  background: #060a12;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 130px;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.diag-footer {
+  padding: 12px 18px;
+  background: #090e1a;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.diag-actions-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.diag-btn {
+  padding: 7px 13px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.16s ease;
+}
+
+.diag-btn-primary {
+  background: #ef4444;
+  color: #fff;
+}
+.diag-btn-primary:hover {
+  background: #dc2626;
+}
+
+.diag-btn-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.diag-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+
+.diag-btn-lightweight {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+.diag-btn-lightweight:hover {
+  background: #f59e0b;
+  color: #000;
+}
+
+/* Toast container */
+.diag-toast-container {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  max-width: 90vw;
+  width: 480px;
+}
+
+.diag-toast {
+  pointer-events: auto;
+  background: #0f172a;
+  border: 1px solid #ef4444;
+  border-radius: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  animation: diagToastIn 0.25s ease-out;
+}
+
+.diag-toast.toast-info {
+  border-color: var(--cisco-teal);
+}
+
+.diag-toast.toast-warning {
+  border-color: #f59e0b;
+}
+
+@keyframes diagToastIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.diag-toast-content {
+  font-size: 12px;
+  color: #f1f5f9;
+  line-height: 1.45;
+}
+
+.diag-toast-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.diag-toast-close:hover {
+  color: #fff;
 }

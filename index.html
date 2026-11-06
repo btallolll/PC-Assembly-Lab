@@ -2,14 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Cisco IT Essentials Virtual Desktop — محاكي تجميع الحاسوب</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet" />
 
   <script>
+    const isLightweightDefault = localStorage.getItem("simulator-lightweight") === "1" ||
+      (!("simulator-lightweight" in localStorage) && matchMedia("(pointer: coarse)").matches);
+
     window.RufflePlayer = window.RufflePlayer || {};
     window.RufflePlayer.config = {
       autoplay: "on",
@@ -18,14 +21,18 @@
       letterbox: "on",
       scale: "showAll",
       warnOnUnsupportedContent: false,
-      quality: matchMedia("(pointer: coarse)").matches ? "medium" : "high",
+      quality: isLightweightDefault ? "low" : "medium",
       maxExecutionDuration: 60,
       showSwfDownload: false,
       contextMenu: "off"
     };
+
+    if (isLightweightDefault) {
+      document.documentElement.classList.add("lightweight-pending");
+    }
   </script>
 
-  <link rel="stylesheet" href="styles.css?v=mobile9" />
+  <link rel="stylesheet" href="styles.css?v=light1" />
 </head>
 <body>
 
@@ -41,9 +48,16 @@
           <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
         </div>
         <span>Cisco Networking Academy • IT Essentials v4.0</span>
+        <span class="badge-pill-new">التحديث 1.1</span>
       </div>
 
       <h1 class="home-title">محاكي تجميع الحاسوب الاحترافي</h1>
+
+      <div class="update-banner">
+        <span class="update-tag">التحديث 1.1</span>
+        <span>🚀 تجربة مستمرة وثابتة بدون انقطاع، وضع خفيف فائق السرعة، وتشخيص ذكي للأعطال.</span>
+      </div>
+
       <p class="home-subtitle">
         بيئة تفاعلية للتعرف على عتاد الحاسوب وتجميعه خطوة بخطوة.
       </p>
@@ -86,8 +100,21 @@
         </div>
       </div>
 
-      <div class="mobile-tip-banner">
-        💡 <strong>نصيحة لمستخدمي الجوال:</strong> للحصول على تجربة تحكم مثالية ومريحة في المحاكي الأصلي، قم بتدوير الهاتف إلى <strong>الوضع الأفقي (Landscape)</strong>.
+      <!-- شريط خيارات الأداء والنصائح -->
+      <div style="display:flex; flex-direction:column; gap:8px; width:100%; max-width:600px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(15,23,42,0.8); border:1px solid var(--border-color); padding:8px 14px; border-radius:10px;">
+          <div style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:#cbd5e1;">
+            <span>⚡</span>
+            <span><strong>الوضع الخفيف (أداء فائق وسرعة قصوى):</strong></span>
+          </div>
+          <button type="button" class="action-btn btn-lightweight" id="home-lightweight-btn" onclick="toggleLightweightMode()">
+            مفعّل
+          </button>
+        </div>
+
+        <div class="mobile-tip-banner">
+          💡 <strong>نصيحة لمستخدمي الجوال:</strong> للحصول على تجربة تحكم مثالية ومريحة في المحاكي الأصلي، قم بتدوير الهاتف إلى <strong>الوضع الأفقي (Landscape)</strong>.
+        </div>
       </div>
     </div>
   </div>
@@ -101,7 +128,7 @@
       <div class="brand">
         <button class="btn-home" onclick="returnToHome()" title="العودة لقائمة البداية">
           <span>🏠</span>
-          <span>القائمة الرئيسية</span>
+          <span class="btn-home-label">القائمة الرئيسية</span>
         </button>
         <div class="brand-text">
           <h1>Cisco IT Essentials</h1>
@@ -112,16 +139,23 @@
       <nav class="view-switcher" aria-label="أنماط العرض">
         <button class="view-btn active" data-view="original" onclick="switchView('original')">
           <span>🖥️</span>
-          <span>المحاكي الأصلي 3D</span>
+          <span class="view-label-full">المحاكي الأصلي 3D</span>
+          <span class="view-label-short">المحاكي</span>
         </button>
         <button class="view-btn" data-view="explorer" onclick="switchView('explorer')">
           <span>🔍</span>
-          <span>موسوعة القطع</span>
+          <span class="view-label-full">موسوعة القطع</span>
+          <span class="view-label-short">الموسوعة</span>
         </button>
       </nav>
 
       <!-- Actions -->
       <div class="topbar-actions">
+        <!-- زر التبديل للوضع الخفيف -->
+        <button class="action-btn btn-lightweight" id="topbar-lightweight-btn" onclick="toggleLightweightMode()" title="تبديل الوضع الخفيف (تقليل استهلاك المعالج والذاكرة)">
+          <span>⚡</span>
+          <span class="btn-text-resp" id="topbar-lightweight-label">خفيف: مفعّل</span>
+        </button>
         <button class="action-btn" onclick="resetCurrentLayer()" title="إعادة ضبط المرحلة الحالية">
           <span>🔄</span>
           <span class="btn-text-resp">إعادة</span>
@@ -136,7 +170,10 @@
     <!-- Main Workspace -->
     <div class="workspace">
       <main class="main-stage">
-
+        <!-- شريط اختيار المراحل باللمس للجوال وسطح المكتب -->
+        <div class="stage-toolbar" id="stage-toolbar">
+          <div class="lesson-pills" id="lesson-pills-container"></div>
+        </div>
 
         <!-- VIEW 1: Authentic Cisco 3D Simulator -->
         <section class="view-panel active" id="view-original">
@@ -144,6 +181,13 @@
           <div class="mobile-orient-prompt" id="mobile-orient-prompt">
             <span>🔄 للحصول على أفضل تحكم وأكبر مساحة باللمس، اقلب هاتفك بالوضع العرضي (Landscape)</span>
             <button class="btn-dismiss-orient" onclick="dismissOrientPrompt()">✕</button>
+          </div>
+
+          <!-- أدوات سريعة عائمة للوضع الأفقي في الجوال -->
+          <div class="landscape-float-bar">
+            <button type="button" class="float-btn" onclick="returnToHome()" title="العودة للقائمة الرئيسية">🏠</button>
+            <button type="button" class="float-btn" onclick="resetCurrentLayer()" title="إعادة ضبط المرحلة">🔄</button>
+            <button type="button" class="float-btn" onclick="toggleLightweightMode()" title="الوضع الخفيف">⚡</button>
           </div>
 
           <div class="swf-frame-wrapper" id="swf-frame-wrapper">
@@ -179,6 +223,46 @@
     </div>
   </div>
 
-  <script src="app.js?v=mobile15"></script>
+  <!-- ==========================================
+       3. نافذة تشخيص وتوضيح سبب المشكلة (Diagnostic Modal)
+       ========================================== -->
+  <div id="error-diagnosis-modal" class="diag-modal-backdrop" style="display: none;" onclick="if(event.target===this) closeDiagModal()">
+    <div class="diag-card" role="alertdialog" aria-modal="true" aria-labelledby="diag-title">
+      <div class="diag-header">
+        <div class="diag-header-title">
+          <span>⚠️</span>
+          <span id="diag-title">تنبيه أثناء التشغيل</span>
+        </div>
+        <button class="diag-close-btn" onclick="closeDiagModal()" title="إغلاق">✕</button>
+      </div>
+      <div class="diag-body">
+        <div class="diag-reason-box">
+          <span class="diag-reason-badge">🔍 سبب المشكلة:</span>
+          <p class="diag-reason-text" id="diag-reason">جاري فحص سبب المشكلة...</p>
+        </div>
+        <div class="diag-solution-box">
+          <span class="diag-solution-badge">💡 كيفية الحل والمتابعة:</span>
+          <p class="diag-solution-text" id="diag-solution">يرجى اتباع الخطوات الموضحة.</p>
+        </div>
+        <details class="diag-details" id="diag-tech-details">
+          <summary>عرض التفاصيل الفنية ورمز الخطأ (للمطورين)</summary>
+          <pre id="diag-tech-pre"></pre>
+        </details>
+      </div>
+      <div class="diag-footer">
+        <div class="diag-actions-left">
+          <button type="button" class="diag-btn diag-btn-primary" id="diag-btn-retry" onclick="retryLastAction()">🔄 إعادة المحاولة</button>
+          <button type="button" class="diag-btn diag-btn-lightweight" id="diag-btn-light" onclick="enableLightweightAndRetry()">⚡ تشغيل بالوضع الخفيف</button>
+          <button type="button" class="diag-btn diag-btn-secondary" onclick="copyDiagReport()">📋 نسخ تقرير المشكلة</button>
+        </div>
+        <button type="button" class="diag-btn diag-btn-secondary" onclick="closeDiagModal()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- الحاوية العائمة لإشعارات التنبيه السريعة (Toast Container) -->
+  <div id="diag-toast-container" class="diag-toast-container"></div>
+
+  <script src="app.js?v=light1"></script>
 </body>
 </html>

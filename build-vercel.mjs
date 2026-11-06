@@ -19,4 +19,7 @@ for (const trial of ['mobile-test', 'mobile-test-v2', 'mobile-test-v3']) {
     filter: source => !source.endsWith('.patched')
   });
   fs.cpSync(path.join(trial, 'models'), path.join(output, trial, 'models'), { recursive: true });
+  if (fs.existsSync(path.join(trial, 'RootMovie.swf'))) {
+    fs.cpSync(path.join(trial, 'RootMovie.swf'), path.join(output, trial, 'RootMovie.swf'));
+  }
 }
